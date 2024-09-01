@@ -1,0 +1,29 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "div_clk",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
+					"strict" : false
+				},
+				{
+					"name" : "reset",
+					"strict" : false
+				},
+				{
+					"name" : "div[0]",
+					"strict" : false
+				},
+				{
+					"name" : "div[1]",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

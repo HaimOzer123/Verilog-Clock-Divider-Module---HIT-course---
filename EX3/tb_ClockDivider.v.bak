@@ -1,0 +1,46 @@
+`timescale 1ns/1ns
+
+module tb_ClockDivider;
+
+    reg clk;
+    reg reset;
+    reg [1:0] div;
+    wire div_clk;
+
+    ClockDivider uut (.clk(clk),.reset(reset),.div(div),.div_clk(div_clk));
+
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk; // clock every 5 ns
+    end
+
+    initial begin
+        reset = 1;  // Initial asynchronous reset
+        div = 2'b00; // Initial DIV value
+        #10 reset = 0; // De-assert asynchronous reset after 10 ns
+
+        // Test cases
+        #100 div = 2'b00; // Set DIV to 00 (100 Hz)
+        #500 div = 2'b01; // Set DIV to 01 (1 kHz)
+        #500 div = 2'b10; // Set DIV to 10 (10 kHz)
+        #500 div = 2'b11; // Set DIV to 11 (100 kHz)
+        #500 div = 2'b01; // Set DIV back to 01 (1 kHz)
+        #500 div = 2'b00; // Set DIV back to 00 (100 Hz)
+
+        // Add more test cases as needed
+
+        #1000 $finish; // Finish simulation after 1000 ns
+    end
+
+    // Assertions for simulation verification
+    always @(posedge clk) begin
+        case (div)
+            2'b00: assert(div_clk === #1 1, "Error: DIV_CLK for DIV=00");
+            2'b01: assert(div_clk === #1 0, "Error: DIV_CLK for DIV=01");
+            2'b10: assert(div_clk === #1 1, "Error: DIV_CLK for DIV=10");
+            2'b11: assert(div_clk === #1 0, "Error: DIV_CLK for DIV=11");
+            default: assert(0, "Unexpected DIV value");
+        endcase
+    end
+
+endmodule
